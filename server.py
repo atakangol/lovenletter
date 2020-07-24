@@ -3,7 +3,7 @@ import datetime
 import os
 import psycopg2 as db
 import random
-import login
+import login,books
 
 from dbinit import db_initialize,init_tables
 
@@ -25,11 +25,16 @@ else:
 	# drop_table(url)
 
 
+
 @app.route("/")
 @app.route("/home")
 def home_page():
-	#print(session['logged_in'])
-	return render_template('home_page.html',login=session['logged_in'])
+	try:
+		log = session['logged_in']
+	except:
+		session['logged_in'] = False
+		log = session['logged_in']
+	return render_template('home_page.html',login=log)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login_page():
@@ -39,7 +44,14 @@ def login_page():
 def logout_page():
 	return login.logout()
 
+@app.route("/search",methods=['GET', 'POST'])
+def search_page():
+	return books.search()
 
+@app.route("/search/results/<search_term>")
+@app.route("/search/results/<search_term>/<page>")
+def search_results_page(search_term,page=0):
+	return books.results(search_term,int(page))
 
 
 if __name__ == "__main__":

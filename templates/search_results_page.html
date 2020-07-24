@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<table>
+    <tr>
+        <th> </th>
+        <th>Title</th>
+        <th> Author(s)</th>
+    </tr>
+    {%for book in results %}
+
+    <tr> 
+        <td><img src = "{{book[2]}}" alt="image not found" ></td>
+        <td>{{book[0]}}</td>
+        <td>{{book[1]}}</td>
+        
+    </tr>
+
+
+    {%endfor%}
+
+    
+</table>
+
+
+
+
+{% endblock content %}

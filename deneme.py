@@ -1,5 +1,6 @@
 import requests
 import math
+import unicodedata
 
 
 
@@ -15,35 +16,70 @@ plus = "+"
 index = 0
 items = 10
 cont = True
-while math.ceil(items/10) > index and cont:
 
+req = requests.get("https://www.googleapis.com/books/v1/volumes/{volumeId}".format(volumeId = "5v1NBhR1W88C"))
 
-    req = requests.get("https://www.googleapis.com/books/v1/volumes?q={search_term}&maxResults=10&startIndex={index}&projection=lite&langRestrict=en&key={key}".format(index=index,search_term=plus.join(key.split(' ')),key=api_key))
-    req = requests.get("https://www.googleapis.com/books/v1/volumes?q={search_term}&maxResults=10&startIndex={index}&projection=lite&langRestrict=en&key={key}".format(index=x*10,search_term=term,key=GOOGLE_API_KEY))
-    
-    #print(req)
-    response = req.json()
+response = req.json()
 
+info = {}
+vi = response["volumeInfo"]
+plus = "+"
 
-    for i in response["items"]:
-        """
+try:
+    info["title"] = vi["title"] + "--" + vi["subtitle"]
+except:
+    info["title"] = vi["title"]
+
+try:
+    info["authors"] = plus.join(vi["authors"])
+except:
+    info["authors"] = None
+
+try:
+    info["publisher"] = vi["publisher"]
+except:
+    info["publisher"] = None
+
+try:
+    info["publishedDate"] = vi["publishedDate"]
+except:
+    info["publishedDate"] = None
+
+try:
+    new_str = unicodedata.normalize("NFKD", vi["description"])
+    info["description "] = new_str
+except:
+    info["description "] = None
+
+try:
+    all_categories = vi["categories"]
+except:
+    all_categories = None
+unique_categories = []
+for i in all_categories:
+    sub = i.split('/')
+    for k in sub:
+        if k not in unique_categories:
+            unique_categories.append(k)
+
+info["categories"] = unique_categories
+
+try:
+    image = vi["imageLinks"]["smallThumbnail"]
+except:
+    try:
+        image = vi["imageLinks"]["thumbnail"]
+    except:
         try:
-            print(i["volumeInfo"]["title"],i["volumeInfo"]["authors"])
+            image = vi["imageLinks"]["small"]
         except:
-            print(i["volumeInfo"]["title"])        
-        """
-        print(i["volumeInfo"])
-        print("\n\n")
-    items = response["totalItems"]
-    #print(items)
-    index += 10
-    #print(index)
-    #cont = input("continue?(y)") == "y"
-    for k in i["volumeInfo"]:
-        print(k)
-    print("\n\n")
-    for k in i:
-        print(k)
-    break
+            try:
+                image = vi["imageLinks"]["medium"]
+            except:
+                try:
+                    image = vi["imageLinks"]["large"]
+                except:
+                    image = None
 
-#print(len(response["items"]))
+info["imagelink"] = image
+print(info)

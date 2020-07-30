@@ -25,7 +25,7 @@ INIT_STATEMENTS = [
 
 """CREATE TABLE IF NOT EXISTS Reviews (
   USER_ID int,
-  BOOK_ID int,
+  BOOK_ID varchar,
   RATING int,
   DATE_RATED date,
   PRIMARY KEY (USER_ID, BOOK_ID));""",

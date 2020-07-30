@@ -8,6 +8,8 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField,StringField, PasswordField, SubmitField, BooleanField,IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
+GOOGLE_API_KEY = "AIzaSyDGkEHbMHzjlk4PsJ0ud_1S7ZfyPHI0btg"
+
 class LoginForm(FlaskForm):
     user_name = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -130,3 +132,16 @@ def logout():
 	session.pop('id', None)
 	session['logged_in'] = False
 	return redirect(url_for('home_page'))
+
+def user_books(url):
+	user_id = session["id"]
+	connection = db.connect(url)
+	cursor = connection.cursor()
+	statement = "select * from reviews where user_id={}".fromat(user_id)
+	cursor.execute(statement)
+	all_reviews = cursor.fetchall() #user_id,rating,date,book_id
+
+
+
+
+	pass

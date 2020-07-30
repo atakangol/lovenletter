@@ -10,7 +10,7 @@
 
     <tr> 
         <td><img src = "{{book[2]}}" alt="image not found" ></td>
-        <td>{{book[0]}}</td>
+        <td><a href = "/book/{{book[3]}}">{{book[0]}}</a></td>
         <td>{{book[1]}}</td>
         
     </tr>
@@ -21,7 +21,7 @@
     
 </table>
 
-
+<a href = "/search/results/{{term}}/{{page}}">Next page</a>
 
 
 {% endblock content %}

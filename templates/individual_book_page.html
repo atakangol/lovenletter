@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="width: 50%; float:left;">
+{%for i in details%}
+    {{details[i] |safe}}<br>
+{%endfor%}
+</div>
+{% if login %}
+<div class="content-section" style="width: 50%; float:right;">
+    {%if old_rating %}
+        <p>your old ratig: {{old_rating}}</p>
+    {%endif%}
+    <form method="POST" action="">
+        {{ rating_form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ rating_form.rating.label(class="form-control-label") }}
+                {{ rating_form.rating(class="form-control") }}
+            </div>
+        
+            <div class="form-group">
+                {{ rating_form.submit(class="btn btn-outline-info") }}
+            </div>
+        </fieldset>
+    </form>
+
+    
+{%else%}
+<p>Login to rate and add this book to your profile</p>
+{%endif%}
+</div>
+
+{% endblock content %}
